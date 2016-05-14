@@ -1,0 +1,27 @@
+.panel-header{
+	overflow:hidden;
+}
+
+.func-btn{
+	margin-right:20px;
+}
+
+.config-list{
+	font-size:12px;
+}
+
+.config-detail-tbl{
+	width:100%;
+}
+
+.config-detail-tbl td{
+	padding:5px;
+}
+
+.container{
+	width:100%;
+}
+
+.form-inline .alert_threshold{
+	width:100px;
+}

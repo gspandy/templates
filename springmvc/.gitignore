@@ -1,0 +1,12 @@
+#不跟踪所有class类型的文件
+*.class
+.DS_Store
+.settings
+.classpath
+.project
+#不跟踪下面的目录
+/bin/
+target/
+WebContent/
+bin/
+logs/

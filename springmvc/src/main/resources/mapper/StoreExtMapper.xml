@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sprucetec.company_store.dao.StoreExtDao">
+	<resultMap id="storeExtMap" type="com.sprucetec.company_store.entity.StoreExt">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+		<result column="sale_code" property="saleCode" jdbcType="VARCHAR" />
+		<result column="c_t" property="cT" jdbcType="INTEGER" />
+		<result column="u_t" property="uT" jdbcType="INTEGER" />
+		<result column="has_lift" property="hasLift" jdbcType="INTEGER" />
+		<result column="company_id" property="companyId" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<sql id="columns">
+		id, company_id, floor,street,has_lift,c_t,u_t,is_deleted,sale_code
+	</sql>
+	
+	<select id="findByPK" parameterType="java.lang.Long" resultMap="storeExtMap">
+		SELECT <include refid="columns"/> FROM t_store WHERE id=#{id}
+	</select>
+	
+	<update id="update" parameterType="com.sprucetec.company_store.entity.StoreExt">
+		UPDATE t_store SET u_t=UNIX_TIMESTAMP(NOW()) 
+		<if test="street != null">
+			, street = #{street}
+		</if>
+		<if test="saleCode != null ">
+			, sale_code = #{saleCode}
+		</if>
+		<if test="floor != null and floor!=0">
+			, floor = #{floor}
+		</if>
+		<if test="hasLift != null">
+			, has_lift = #{hasLift}
+		</if>
+		<if test="companyId != null">
+			, company_id = #{companyId}
+		</if>
+		WHERE id=#{id}
+	</update>
+	
+	<insert id="insert" parameterType="com.sprucetec.company_store.entity.StoreExt" useGeneratedKeys="true" keyProperty="id">
+		insert into t_store(sale_code,company_id, floor,street,has_lift,c_t,u_t,is_deleted)
+		values (#{saleCode},#{companyId},#{floor},#{street},#{hasLift},UNIX_TIMESTAMP(NOW()), UNIX_TIMESTAMP(NOW()),0)
+	</insert>
+</mapper>
