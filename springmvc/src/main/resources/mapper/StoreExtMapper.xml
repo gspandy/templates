@@ -39,6 +39,13 @@
 		WHERE id=#{id}
 	</update>
 	
+	<update id="batchUpdate" parameterType="java.util.List">
+		<foreach collection="list" separator=";" item="item">
+			UPDATE t_store SET u_t=UNIX_TIMESTAMP(NOW()) 
+			WHERE id=#{item.id}
+		</foreach>
+	</update>
+	
 	<insert id="insert" parameterType="com.sprucetec.company_store.entity.StoreExt" useGeneratedKeys="true" keyProperty="id">
 		insert into t_store(sale_code,company_id, floor,street,has_lift,c_t,u_t,is_deleted)
 		values (#{saleCode},#{companyId},#{floor},#{street},#{hasLift},UNIX_TIMESTAMP(NOW()), UNIX_TIMESTAMP(NOW()),0)

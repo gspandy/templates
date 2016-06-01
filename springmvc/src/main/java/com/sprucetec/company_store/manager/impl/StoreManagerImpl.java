@@ -14,5 +14,9 @@ public class StoreManagerImpl implements StoreManager{
 	public StoreExt findById(Long id) {
 		return storeExtDao.findByPK(id, StoreExt.class);
 	}
+	@Override
+	public void update(StoreExt ext) {
+		storeExtDao.update(ext);
+	}
 
 }
