@@ -1,0 +1,1 @@
+@java -Dfile.encoding="UTF-8" -cp %~dp0/../lib/*;%~dp0/../conf/ com.sprucetec.swagger.json_cover.BoneLauncher %1 %2
