@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    	http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	<!-- <dubbo:application name="${application.name}" owner="programmer"
+		organization="dubbox" environment="${dubbo.environment}" /> -->
+	<dubbo:application name="${application.name}" owner="programmer"
+			organization="dubbox" /> 		
+	<dubbo:registry address="${dubbo.address}" protocol="zookeeper" />
+	
+	 <bean id="gateway" class="net.xicp.hkscript.gateway.gateway.SpringServiceGateway">
+	</bean>			
+	
+	
+
+	
+	<bean id="gatewayConfiguration" class="net.xicp.hkscript.gateway.gateway.JdbcGatewayAcessControlConfiguration">
+		<property name="tableName" value="t_gateway_configs"/>
+		<property name="autoRefresh" value="true"/>
+		<property name="dataSource" ref="dataSource"/>
+		<property name="redisPool" ref="redisPool"/>
+	</bean>		
+	
+	<bean id="serviceGateway" class="net.xicp.hkscript.gateway.gateway.ServiceGatewayWithAccessControl">
+		<property name="serviceGateway" ref="gateway"/>
+		<property name="configuration" ref="gatewayConfiguration"/>		
+	
+	</bean>
+
+	<!-- <dubbo:reference id="registryService" interface="com.alibaba.dubbo.registry.RegistryService" check="false" />
+
+	<bean id="governanceCache" class="net.xicp.hkscript.gateway.gateway.web.RegistryServerSync" /> -->
+	
+	
+
+    
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="${dbcp.initialSize}" />
+		<property name="maxActive" value="${dbcp.maxActive}" />
+		<property name="maxIdle" value="${dbcp.maxIdle}" />
+		<property name="minIdle" value="${dbcp.minIdle}" />
+
+
+		<property name="timeBetweenEvictionRunsMillis" value="${dbcp.timeBetweenEvictionRunsMillis}" />
+		<property name="numTestsPerEvictionRun" value="${dbcp.numTestsPerEvictionRun}" />
+		<property name="minEvictableIdleTimeMillis" value="${dbcp.minEvictableIdleTimeMillis}" />
+		<property name="testWhileIdle" value="${dbcp.testWhileIdle}" />
+		<property name="testOnBorrow" value="${dbcp.testOnBorrow}" />
+		<property name="testOnReturn" value="${dbcp.testOnReturn}" />
+		<property name="validationQuery" value="${dbcp.validationQuery}" />
+		<property name="removeAbandoned" value="${dbcp.removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${dbcp.removeAbandonedTimeout}" />
+		<property name="logAbandoned" value="${dbcp.logAbandoned}" />
+	</bean>	
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+	</bean>		
+	
+    <bean id="redisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="${redis.maxTotal}"/>
+        <property name="minIdle" value="${redis.minIdle}"/>
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}"/>
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+        <property name="testOnReturn" value="${redis.testOnReturn}"/>
+        <property name="testWhileIdle" value="${redis.testWhileIdle}"/>
+    </bean>
+
+    <bean id="redisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg index="0" ref="redisPoolConfig" type="org.apache.commons.pool2.impl.GenericObjectPoolConfig"/>
+        <constructor-arg index="1" value="${redis.ip}" type="java.lang.String"/>
+        <constructor-arg index="2" value="${redis.port}" type="int"/>
+        <constructor-arg index="3" value="${redis.timeout}" type="int"/>
+    </bean>		
+</beans>

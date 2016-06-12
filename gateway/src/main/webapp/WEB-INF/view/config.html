@@ -1,0 +1,204 @@
+
+<div class="container">
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+					    <div  class="navbar-brand">
+						配置列表
+						</div>
+					</div>
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-1">
+
+						<ul class="nav navbar-nav navbar-right navbar-form">
+							<li class="func-btn">
+								<button type="button" class="btn btn-primary btn-lg"
+									data-toggle="modal" data-target="#newConfigModal">添加新配置</button>
+							</li class="func-btn">
+							<li>
+								<button type="button" class="btn btn-primary btn-lg"
+									id="delete-config-btn" delete-url="$rootContextPath.getURI("config/remove")">删除所选</button>
+							</li>							
+						</ul>
+					</div>
+					<!-- /.navbar-collapse -->
+				</div>
+				<!-- /.container-fluid -->
+			</nav>
+		</div>
+
+
+		<!-- Table -->
+		<table class="table config-list">
+			<thead>
+				<tr>
+					<td><input type="checkbox" aria-label="选择" id="select-all"/></td>
+					<td>分组</td>
+					<td>服务</td>
+					<td>方法</td>
+					<td>参数名</td>
+					<td>参数值</td>
+					<td>操作</td>
+					
+				</tr>
+			</thead>
+
+			<tbody>
+
+				#foreach($config in $configs)
+				<tr>
+					<td><input data-id="${config.id}" type="checkbox" class="config-select" aria-label="选择"/></td>
+					<td data-toggle="tooltip" title="${config.group}">
+						<div style="text-overflow: ellipsis;width:100px;overflow: hidden;">						
+						<nobr>${config.group}</nobr>						
+						</div>
+						
+					</td>
+					<td>
+						
+						${config.service}
+
+					</td>
+					<td>${config.method}</td>
+					<td>${config.parameter}</td>
+					<td>${config.value}</td>
+					<td>
+					<a href="#" data-id="${config.id}" data-group="${config.group}" data-service="${config.service}" data-parameter="${config.parameter}" data-method="${config.method}"  data-value="${config.value}" class="modify">
+						修改</a>
+					</td>				
+				</tr>
+				#end
+			</tbody>
+		</table>
+	</div>
+	
+	
+	<div class="modal fade" id="modifyConfigModal" tabindex="-1" role="dialog" aria-labelledby="modifyConfigModalLabel">
+		<form action="$rootContextPath.getURI("config/save")"  id="config_modify_form">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">修改配置</h4>
+					</div>
+					<div class="modal-body form-horizontal">
+
+
+						<div class="form-group ">
+							<label for="recipient-name" class="control-label col-sm-4">分组/服务(输入格式为group/service):</label>	
+							<div class="col-sm-8">						
+							<input type="text" class="form-control group-service" name="group-service" readonly="readonly" autocomplete="off" >
+							<input type="hidden" name="group" class="group">
+							<input type="hidden" name="service" class="service">
+							<input type="hidden" name="id" class="id">				
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="recipient-name" class="control-label col-sm-4">方法名(选填):</label>		
+							<div class="col-sm-8">																				
+							<input type="text" class="form-control" name="method" readonly="readonly" autocomplete="off">
+							</div>														
+						</div>						
+												
+						<div class="form-group">
+							<label for="message-text" class="control-label col-sm-4">参数名:</label>
+							<div class="col-sm-8">
+							<input type="text" class="form-control " name="parameter" readonly="readonly" autocomplete="off" >
+							</div>		
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label col-sm-4">参数值:</label>
+							<div class="col-sm-8">
+							<textarea class="form-control" name="value" ></textarea>
+							</div>
+						</div>
+	
+										
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>	
+
+	<div class="modal fade" id="newConfigModal" tabindex="-1" role="dialog" aria-labelledby="newConfigModalLabel">
+		<form action="$rootContextPath.getURI("config/save")" id="config_form">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title" id="myModalLabel">添加新配置</h4>
+					</div>
+					<div class="modal-body form-horizontal">
+
+						<div class="form-group ">
+							<label for="recipient-name" class="control-label col-sm-4">分组/服务(输入格式为group/service):</label>	
+							<div class="col-sm-8">						
+							<input type="text" class="form-control group-service" name="group-service" >
+							<input type="hidden" name="group" class="group">
+							<input type="hidden" name="service" class="service">			
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label for="recipient-name" class="control-label col-sm-4">方法名(选填):</label>		
+							<div class="col-sm-8">																				
+							<input type="text" class="form-control" name="method">
+							</div>														
+						</div>						
+												
+						<div class="form-group">
+							<label for="message-text" class="control-label col-sm-4">参数:</label>
+							<div class="col-sm-8">
+							<select class="parameter_input" class="form-control col-sm-8"  name="parameter" target=".new_parameter_format">
+								<option value="g_qps_limit" format="$startTime~$endTime/$qps_limit或者$qps_limit,时间格式支持yyyy-MM-dd/yyyy-MM-dd HH:mm/HH:mm/yyyy-MM-dd HH/MM-dd/MM:dd HH:mm">系统每秒请求限制(g_qps_limit)</option>
+								<option value="qps_limit" format="$startTime~$endTime/$qps_limit或者$qps_limit,时间格式支持yyyy-MM-dd/yyyy-MM-dd HH:mm/HH:mm/yyyy-MM-dd HH/MM-dd/MM:dd HH:mm">单机每秒请求限制(qps_limit)</option>
+								<option value="allow" format="ON/OFF">访问限制(allow)</option>
+								<option value="parameters" format="java.lang.String,java.lang.Integer，参数之间用逗号隔开">请求参数类型(parameters)</option>
+								<option value="alias"  format="">服务别名(alias)</option>
+							</select>		
+							</div>		
+						</div>
+						<div class="form-group">
+							<label for="message-text" class="control-label col-sm-4">参数值:</label>
+							<div class="col-sm-8">
+							格式:<span class="new_parameter_format">$startTime~$endTime/$qps_limit或者$qps_limit,时间格式支持yyyy-MM-dd/yyyy-MM-dd HH:mm/HH:mm/yyyy-MM-dd HH/MM-dd/MM:dd HH:mm</span>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class=" col-sm-4"></div>
+							<div class="col-sm-8">
+							<textarea class="form-control" name="value" ></textarea>
+							</div>
+						</div>
+
+						
+										
+
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

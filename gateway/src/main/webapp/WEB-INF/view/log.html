@@ -1,0 +1,108 @@
+
+<div class="container">
+	<div class="panel panel-default">
+		<!-- Default panel contents -->
+		<div class="panel-heading">
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">日志</a>
+					</div>
+
+
+					<!-- /.navbar-collapse -->
+				</div>
+				<!-- /.container-fluid -->
+			</nav>
+		</div>
+
+		<table class="config-detail-tbl">
+			<tr>
+				<td>最后调用者</td>
+				<td>
+					#if($config.lastInvoker)
+						${config.lastInvoker}
+					#end
+				</td>
+				<td>最后调用时间</td>
+				<td>
+					#if($config.lastInvokeTimeAsDate)
+						${config.lastInvokeTimeAsDate}
+					#end
+				</td>
+				<td>最后通知时间</td>
+				<td>
+					#if($config.lastNotifyTimeAsDate)
+						${config.lastNotifyTimeAsDate}
+					#end
+				</td>				
+			</tr>
+			<tr>
+				<td>积压队列</td>
+				<td>
+						#if($config.lastBacklogCount&&$config.lastBacklogCount>=$config.alertQueueLength)
+							<div class="alert-danger" >$config.lastBacklogCount</div>
+						#elseif($config.lastErrorCount==-1)
+							<div class="alert-danger">调用失败</div>								
+						#elseif($config.lastBacklogCount)
+							<div>$config.lastBacklogCount</div>
+						#end
+				</td>
+				<td>错误数</td>
+				<td>
+						#if($config.lastErrorCount&&$config.lastErrorCount>=$config.alertErrorCount)
+							<div class="alert-danger">$config.lastErrorCount</div>
+						#elseif($config.lastErrorCount==-1)
+							<div class="alert-danger">调用失败</div>	
+						#elseif($config.lastErrorCount)
+							<div>$config.lastErrorCount</div>
+						#end
+				</td>
+				<td></td>
+				<td></td>				
+			</tr>			
+		</table>
+		<!-- Table -->
+		<table class="table config-list">
+			<thead>
+				<td>报警时间</td>
+				<td>报警类型</td>
+				<td>报警值</td>
+				<td>通知消息</td>
+				<td>通知时间</td>
+				<td>联系人</td>
+				<td>联系电话</td>		
+			</thead>
+
+			<tbody>
+				#if($logs.size()>0)
+					#foreach($log in $logs)
+					<tr>
+						<td>${log.alertTimeAsDate}</td>
+						<td>${log.alertType}</td>
+						<td>${log.alertValue}</td>
+						<td data-toggle="tooltip" title="${log.notifyMessage}">
+							
+							<div style="text-overflow: ellipsis;width:100px;overflow: hidden;">
+							<nobr>${log.notifyMessage}</nobr>
+							</div>
+						</td>
+						<td>${log.notifyTimeAsDate}</td>
+						<td>${log.contacts}</td>
+						<td>${log.phones}</td>					
+					</tr>
+					#end
+					<tr>
+						<td colspan="7" style="text-align:center"><a href="$rootContextPath.getURI("log/list")/$config.id/all">加载所有</a></td>
+					</tr>
+				#else
+					<tr>
+						<td colspan="7" style="text-align:center">无报警</td>
+					</tr>				
+				#end
+			</tbody>
+		</table>
+	</div>
+
+</div>
